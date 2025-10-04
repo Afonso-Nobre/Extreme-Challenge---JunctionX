@@ -104,7 +104,7 @@ def class_to_name(class_label):
     elif class_label == 1:
         return "offensive language"
     elif class_label == 2:
-        return "appropriate language"
+        return "appropriate"
     else:
         return "no idea"
 
