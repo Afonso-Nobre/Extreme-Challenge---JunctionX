@@ -1,3 +1,16 @@
+"""
+Transcription script using OpenAI Whisper and FFmpeg.
+
+Dependencies:
+- whisper (https://github.com/openai/whisper) - MIT License
+- FFmpeg (https://ffmpeg.org/) - LGPL/GPL License
+
+This script converts audio/video files to text and optionally returns
+chunks of words with approximate timestamps.
+
+Created with the help of OpenAI ChatGPT.
+"""
+
 import whisper
 from pathlib import Path
 
