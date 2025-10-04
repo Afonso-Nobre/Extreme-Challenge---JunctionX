@@ -7,6 +7,48 @@
 </head>
 <body>
 
+<button id="showRulesBtn" class="btn btn-primary rules-btn" style="margin: 20px;">
+    Our Policy
+</button>
+
+<!-- Rules Modal -->
+<div id="rulesModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Developed with TU Delft values of Integrity, Respect, and Responsibility</h2>
+        <p>This tool helps you pre-screen audio and video so freely available speech data can be used to train inclusive
+            models without importing extremist content or bias.
+            Our system analyzes spoken or written content and classifies it into three categories:
+        </p>
+        <ul>
+            <li>Offensive Language</li>
+            <li>Extremist View</li>
+            <li>Appropriate Speech</li>
+        </ul>
+        <h3>How We Define These Categories</h3>
+        <ul>
+            <li><b>Offensive Language:</b></li>
+            <p>Speech containing words or expressions widely recognized as offensive or inappropriate, such as
+                profanity, slurs, or explicit insults.
+
+                <br><br><i>→ Keyword-based:</i> the system detects specific terms generally considered offensive in most
+                usages and labels them directly as hate speech independent of the context.
+            <li> <b>Extremist Views:</b></li>
+            <p>Statements that express extreme beliefs and/or strict opinions on societally significant topics
+                regardless of where they lie on the ethical, socioeconomic and political spectrum are considered
+                extremist views. If they promote intolerance, violence, or discrimination against others, they are
+                directly marked.
+                <br><br><i>→ Context matters most: </i>the system analyzes the meaning of the entire statement, not just
+                individual
+                words.
+            <li><b>Appropriate Speech:</b></li>
+            <p>Content that does not include hate speech or extremist views.
+            </p>
+        </ul>
+    </div>
+</div>
+
+
 <div class="container">
     <div class="upload-section">
         <form method="POST" enctype="multipart/form-data" class="form-card" id="uploadForm">
@@ -27,12 +69,13 @@
         <!-- Status text -->
         <div id="uploadStatus">
             {% if uploaded_info %}
-                Done
+            Done
             {% endif %}
         </div>
     </div>
 
-    <div class="feedback-section" id="feedbackSection" style="{% if feedback %}display:block{% else %}display:none{% endif %}">
+    <div class="feedback-section" id="feedbackSection"
+         style="{% if feedback %}display:block{% else %}display:none{% endif %}">
         <h1>App Feedback</h1>
         {% if feedback %}
         <p>{{ feedback }}</p>
@@ -44,16 +87,42 @@
 </div>
 
 <script>
-  const form = document.getElementById("uploadForm");
-  const feedback = document.getElementById("feedbackSection");
-  const statusText = document.getElementById("uploadStatus");
+    const form = document.getElementById("uploadForm");
+    const feedback = document.getElementById("feedbackSection");
+    const statusText = document.getElementById("uploadStatus");
 
-  form.addEventListener("submit", function() {
-    // Show feedback section immediately
-    feedback.style.display = "block";
+    form.addEventListener("submit", function() {
+      // Show feedback section immediately
+      feedback.style.display = "block";
 
-    // Show "Waiting..." while the upload is running
-    statusText.textContent = "Waiting…";
+      // Show "Waiting..." while the upload is running
+      statusText.textContent = "Waiting…";
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    const modal = document.getElementById("rulesModal");
+    const btn = document.getElementById("showRulesBtn");
+    const span = document.getElementsByClassName("close")[0];
+
+    // Show the modal automatically on first page load
+    modal.style.display = "block";
+
+    // When the user clicks the "Show Rules" button
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks the (×) close button
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks outside the modal
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    }
   });
 </script>
 
