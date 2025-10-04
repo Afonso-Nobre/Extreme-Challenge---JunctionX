@@ -90,27 +90,42 @@ def predict_sentences(sentences):
     preds = clf.predict(matrix_new)
     return preds
 
-def find_extremes(sentences):
-    preds = predict_sentences(sentences)
-    result = ""
-    for i, s in enumerate(sentences):
-        result += f"{i}: \"{s}\" → {class_to_name(preds[i])}\n"
-    return result
-
-
 parent_dir = Path.cwd().parent
 en_path = parent_dir/"data"/"database"/"en.txt"
 # reads the database
 with open(en_path, "r", encoding="utf-8") as f:
     bad_words = set(w.strip().lower() for w in f if w.strip())
 
+def find_extremes(sentences, timestamps):
 
-# merge this with find extremes
-def filter_bad_words(sentences):
-    results = []
-    for s in sentences:
+    if len(sentences) == 0:
+        return "Empty file"
+
+    preds = predict_sentences(sentences)
+
+    if len(sentences) == 1:
+        if preds[0] == 0 or preds[0] == 1:
+            return "Short file with problems!"
+
+    result = ""
+    for i, s in enumerate(sentences):
+        # offensive language
         tokens = tokenize(s)
         found = [t for t in tokens if t in bad_words]
         if found:
-            results.append((s + " → bad language"))
-    return results
+            if i == len(sentences) - 1:
+                result += str(timestamps[i]) + "."
+            else:
+                result += str(timestamps[i]) + "; "
+
+        # results from the model
+        if preds[i] == 0 or preds[i] == 1:
+            if i == len(sentences) - 1:
+                result += str(timestamps[i]) + "."
+            else:
+                result += str(timestamps[i]) + "; "
+
+    if result == "":
+        return "No problems found"
+
+    return "Problems found around the following times: \n" + result

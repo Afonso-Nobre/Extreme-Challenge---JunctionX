@@ -56,7 +56,7 @@ def convert(filename: str, words_per_chunk: int = 100):
         for i in range(0, len(words), words_per_chunk):
             chunk = words[i : i + words_per_chunk]
             chunk = " ".join(chunk)
-            word_table.append((chunk, start_time))
+            word_table.append([chunk, start_time])
 
     return word_table
 
