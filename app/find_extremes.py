@@ -1,29 +1,22 @@
 """
 This file contains code to
 
-    (a) Load the pre-trained classifier and
-    associated files.
-
-    (b) Transform new input data into the
+    (1) Transform new input data into the
     correct format for the classifier.
 
-    (c) Run the classifier on the transformed
+    (2) Run the classifier on the transformed
     data and return results.
+
+Inspired by https://github.com/t-davidson/hate-speech-and-offensive-language
 """
 
-import pickle
 import numpy as np
-import pandas as pd
-import joblib
-from sklearn.svm import LinearSVC
 from sklearn.linear_model import LogisticRegression
-from sklearn.feature_selection import SelectFromModel
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 import nltk
 nltk.download('stopwords')
 nltk.download('averaged_perceptron_tagger_eng')
 from nltk.stem.porter import *
-import string
 import re
 from scipy.sparse import hstack
 
@@ -167,14 +160,14 @@ if __name__ == '__main__':
         print(i, sentences[i])
         print("Classified as " + class_to_name(sentences_predictions[i]))
 
-    # print("Calculate accuracy on labeled data")
-    # sentences = []
-    # labels = []
-    # predictions = get_sentences_predictions(sentences)
-    # right_count = 0
-    # for i,s in enumerate(sentences):
-        #     if sentences_class[i] == predictions[i]:
-    #         right_count += 1
+    """print("Calculate accuracy on labeled data")
+    test_sentences = []
+    test_labels = []
+    test_predictions = get_sentences_predictions(sentences)
+    right_count = 0
+    for i,s in enumerate(sentences):
+         if test_labels[i] == test_predictions[i]:
+            right_count += 1
 
-    # accuracy = right_count / float(len(df))
-    # print "accuracy", accuracy
+    accuracy = right_count / float(len(test_sentences))
+    print("Accuracy: ", accuracy)"""
