@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
@@ -88,6 +90,12 @@ def predict_sentences(sentences):
     preds = clf.predict(matrix_new)
     return preds
 
+parent_dir = Path.cwd().parent
+en_path = parent_dir/"data"/"database"/"en.txt"
+# reads the database
+with open(en_path, "r", encoding="utf-8") as f:
+    bad_words = set(w.strip().lower() for w in f if w.strip())
+
 def find_extremes(sentences, timestamps):
 
     if len(sentences) == 0:
@@ -101,6 +109,16 @@ def find_extremes(sentences, timestamps):
 
     result = ""
     for i, s in enumerate(sentences):
+        # offensive language
+        tokens = tokenize(s)
+        found = [t for t in tokens if t in bad_words]
+        if found:
+            if i == len(sentences) - 1:
+                result += str(timestamps[i]) + "."
+            else:
+                result += str(timestamps[i]) + "; "
+
+        # results from the model
         if preds[i] == 0 or preds[i] == 1:
             if i == len(sentences) - 1:
                 result += str(timestamps[i]) + "."
