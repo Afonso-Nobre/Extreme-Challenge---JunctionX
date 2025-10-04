@@ -1,0 +1,88 @@
+body {
+  font-family: 'Poppins', Lucida Sans;
+  background: #F8F8FF ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+
+
+  background: url("/static/tuDelft.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+}
+
+.container {
+  background: #1E90FF ;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  width: 400px;
+  text-align: left;
+  color: #fff;
+  backdrop-filter: blur(12px);
+}
+
+.welcome {
+  margin-bottom: 40px;
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+.upload-section {
+  margin-bottom: 10px;  /* Adjust the value to add more or less space */
+}
+
+.feedback-section {
+  padding-top: 15px;  /* This will add space at the top of the feedback section */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input[type="text"],
+textarea,
+input[type="file"] {
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 1em;
+  margin-bottom: 12px;
+}
+
+textarea {
+  resize: none;
+}
+
+button {
+  background: #FFFFFF;
+  color: #333;
+  font-weight: bold;
+  border: none;
+  padding: 12px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #ffd86f;
+  transform: translateY(-2px);
+}

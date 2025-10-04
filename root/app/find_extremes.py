@@ -135,7 +135,7 @@ def get_sentences_predictions(sentences, data, labels):
     return predicted_class
 
 
-if __name__ == '__main__':
+def find_extremes(sentences) :
 
     # Example training data
     data = [
@@ -148,17 +148,19 @@ if __name__ == '__main__':
     labels = [2, 0, 2, 0, 1]  # 0=hate, 1=offensive, 2=neither
 
     # New sentences to classify
-    sentences = [
+    """sentences = [
         "Racism should be eliminated from society",
         "People from that group are dangerous",
         "You idiot, stop talking"
-    ]
+    ]"""
     sentences_predictions = get_sentences_predictions(sentences, data, labels)
 
     print("Printing predicted values: ")
+    result = ""
     for i,s in enumerate(sentences):
         print(i, sentences[i])
         print("Classified as " + class_to_name(sentences_predictions[i]))
+        result += str(i) + " is: " + str(sentences[i]) + "\n" + "And is classified as: " + str(class_to_name(sentences_predictions[i]))
 
     """print("Calculate accuracy on labeled data")
     test_sentences = []
@@ -168,6 +170,7 @@ if __name__ == '__main__':
     for i,s in enumerate(sentences):
          if test_labels[i] == test_predictions[i]:
             right_count += 1
-
     accuracy = right_count / float(len(test_sentences))
     print("Accuracy: ", accuracy)"""
+
+    return result
