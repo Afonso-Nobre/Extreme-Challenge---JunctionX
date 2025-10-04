@@ -2,29 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Extreme Challenge</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <div class="container">
     <div class="upload-section">
-        <form method="POST" enctype="multipart/form-data" class="form-card">
+        <form method="POST" enctype="multipart/form-data" class="form-card" id="uploadForm">
             <h1 for="file">Upload File</h1>
             <input type="file" id="file" name="file" required>
             <button type="submit">Upload</button>
         </form>
-        {% if message %}
-        <script>
-            const msg = "{{ message }}";
-            const type = "{{ message_type }}";
-            if (type === "success") {
-              alert(msg);
-            } else {
-              alert(msg);
-            }
-        </script>
-        {% endif %}
 
         {% if uploaded_info %}
         <div class="file-list">
@@ -34,18 +23,40 @@
             </a>
         </div>
         {% endif %}
+
+        <!-- Status text -->
+        <div id="uploadStatus">
+            {% if uploaded_info %}
+                Done
+            {% endif %}
+        </div>
     </div>
 
-    <div class="feedback-section">
+    <div class="feedback-section" id="feedbackSection" style="{% if feedback %}display:block{% else %}display:none{% endif %}">
         <h1>App Feedback</h1>
         {% if feedback %}
         <p>{{ feedback }}</p>
         {% else %}
-        <p class="placeholder">Feedback from the app will appear here after you upload a file.</p>
+        <p class="placeholder">Feedback from the app will appear here after running...</p>
         {% endif %}
     </div>
 
 </div>
+
+<script>
+  const form = document.getElementById("uploadForm");
+  const feedback = document.getElementById("feedbackSection");
+  const statusText = document.getElementById("uploadStatus");
+
+  form.addEventListener("submit", function() {
+    // Show feedback section immediately
+    feedback.style.display = "block";
+
+    // Show "Waiting..." while the upload is running
+    statusText.textContent = "Waiting…";
+  });
+</script>
+
 
 </body>
 </html>
