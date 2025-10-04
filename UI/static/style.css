@@ -1,11 +1,15 @@
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', Lucida Sans;
   background: #F8F8FF ;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   margin: 0;
+
+  background: url("/static/tuDelft.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
 }
 
 .container {
@@ -26,11 +30,11 @@ body {
 }
 
 .upload-section {
-  margin-bottom: 50px;  /* Adjust the value to add more or less space */
+  margin-bottom: 10px;  /* Adjust the value to add more or less space */
 }
 
 .feedback-section {
-  padding-top: 20px;  /* This will add space at the top of the feedback section */
+  padding-top: 15px;  /* This will add space at the top of the feedback section */
 }
 
 h1 {
@@ -66,7 +70,7 @@ textarea {
 }
 
 button {
-  background: #E0FFFF;
+  background: #FFFFFF;
   color: #333;
   font-weight: bold;
   border: none;
