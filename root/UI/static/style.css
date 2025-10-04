@@ -7,7 +7,8 @@ body {
   height: 100vh;
   margin: 0;
 
-  background: url("/static/tuDelft.jpeg") no-repeat center center fixed;
+
+  background: url("/static/tuDelft.jpg") no-repeat center center fixed;
   background-size: cover;
   position: relative;
 }
