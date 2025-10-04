@@ -1,7 +1,7 @@
 import whisper
 from pathlib import Path
 
-model = whisper.load_model("small")
+model = whisper.load_model("base")
 
 def convert(filename: str):
     data_path = Path("data")
