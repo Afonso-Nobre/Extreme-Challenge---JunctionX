@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
@@ -94,3 +96,21 @@ def find_extremes(sentences):
     for i, s in enumerate(sentences):
         result += f"{i}: \"{s}\" → {class_to_name(preds[i])}\n"
     return result
+
+
+parent_dir = Path.cwd().parent
+en_path = parent_dir/"data"/"database"/"en.txt"
+# reads the database
+with open(en_path, "r", encoding="utf-8") as f:
+    bad_words = set(w.strip().lower() for w in f if w.strip())
+
+
+# merge this with find extremes
+def filter_bad_words(sentences):
+    results = []
+    for s in sentences:
+        tokens = tokenize(s)
+        found = [t for t in tokens if t in bad_words]
+        if found:
+            results.append((s + " → bad language"))
+    return results
