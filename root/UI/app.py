@@ -65,8 +65,9 @@ def uploaded_file(filename):
 
 def run_algorithm(filename):
     table = sc.convert(filename)
-    sentences = [chunk for chunk, _ in table]
-    result = fe.find_extremes(sentences)
+    sentences = [x[0] for x in table]
+    timestamps = [x[1] for x in table]
+    result = fe.find_extremes(sentences, timestamps)
     return result
 
 

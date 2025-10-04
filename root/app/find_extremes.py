@@ -88,9 +88,26 @@ def predict_sentences(sentences):
     preds = clf.predict(matrix_new)
     return preds
 
-def find_extremes(sentences):
+def find_extremes(sentences, timestamps):
+
+    if len(sentences) == 0:
+        return "Empty file"
+
     preds = predict_sentences(sentences)
+
+    if len(sentences) == 1:
+        if preds[0] == 0 or preds[0] == 1:
+            return "Short file with problems!"
+
     result = ""
     for i, s in enumerate(sentences):
-        result += f"{i}: \"{s}\" → {class_to_name(preds[i])}\n"
-    return result
+        if preds[i] == 0 or preds[i] == 1:
+            if i == len(sentences) - 1:
+                result += str(timestamps[i]) + "."
+            else:
+                result += str(timestamps[i]) + "; "
+
+    if result == "":
+        return "No problems found"
+
+    return "Problems found around the following times: \n" + result
