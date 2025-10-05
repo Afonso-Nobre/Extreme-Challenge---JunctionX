@@ -1,28 +1,35 @@
-from pathlib import Path
+""""
+Dependencies:
+- https://github.com/t-davidson/hate-speech-and-offensive-language - MIT License
 
+This trains the model, based on database data and returns classified timestamps.
+
+Created with the help of OpenAI ChatGPT.
+"""
+
+from pathlib import Path
+import pandas as pd
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 import nltk
-nltk.download('stopwords', quiet=True)
 nltk.download('averaged_perceptron_tagger_eng', quiet=True)
 from nltk.stem.porter import PorterStemmer
 import re
 from scipy.sparse import hstack, csr_matrix
 from textstat.textstat import textstat
 
-# Example training data
-data = [
-        "People from different backgrounds bring value to society",  # neither
-        "Immigrants from certain groups are ruining the country",    # hate
-        "Everyone deserves equal treatment regardless of race",      # neither
-        "Some races are inferior to others",                         # hate
-        "That person is so dumb",                                    # offensive
-]
+database_dir = Path.cwd().parent / "data" / "database"
 
-labels = [2, 0, 2, 0, 1]  # 0=hate, 1=offensive, 2=neither
+# Get all CSV files in the folder
+csv_files = list(database_dir.glob("*.csv"))
 
-stopwords = nltk.corpus.stopwords.words("english")
+dfs = [pd.read_csv(f, usecols=["sentence", "label"]) for f in csv_files]
+df = pd.concat(dfs, ignore_index=True)
+
+data = df["sentence"].astype(str).tolist()
+labels = df["label"].astype(int).tolist()
+
 stemmer = PorterStemmer()
 
 def tokenize(sentence):
@@ -31,26 +38,26 @@ def tokenize(sentence):
     return tokens
 
 def get_pos_tags(sentences):
-    tweet_tags = []
+    pos_list = []
     for s in sentences:
         tokens = tokenize(s)
         tags = nltk.pos_tag(tokens)
         tag_str = " ".join(tag for _, tag in tags)
-        tweet_tags.append(tag_str)
-    return tweet_tags
+        pos_list.append(tag_str)
+    return pos_list
+
 
 def features(sentence):
     syllables = textstat.syllable_count(sentence)
-    num_chars = sum(len(w) for w in sentence)
     num_chars_total = len(sentence)
     num_words = len(sentence.split())
-    avg_syl = round(float((syllables+0.001))/(float(num_words+0.001)),4)
+    avg_syl = round((syllables + 0.001) / (num_words + 0.001), 4)
     num_unique_terms = len(set(sentence.split()))
 
-    FKRA = round(float(0.39 * float(num_words)/1.0) + float(11.8 * avg_syl) - 15.59,1)
-    FRE = round(206.835 - 1.015*(float(num_words)/1.0) - (84.6*float(avg_syl)),2)
+    FKRA = round(0.39 * num_words + 11.8 * avg_syl - 15.59, 1)
+    FRE = round(206.835 - 1.015 * num_words - 84.6 * avg_syl, 2)
 
-    return [FKRA, FRE, syllables, num_chars, num_chars_total, num_words, num_unique_terms]
+    return [FKRA, FRE, syllables, num_chars_total, num_words, num_unique_terms]
 
 def get_oth_features(sentences):
     feats = []
@@ -58,7 +65,7 @@ def get_oth_features(sentences):
         feats.append(features(s))
     return np.array(feats)
 
-tf_vectorizer = TfidfVectorizer(ngram_range=(1, 2))
+tf_vectorizer = TfidfVectorizer(ngram_range=(1, 1), max_features=5000)
 matrix_tf = tf_vectorizer.fit_transform(data)
 
 pos_vectorizer = CountVectorizer()
@@ -69,7 +76,7 @@ matrix_other = csr_matrix(get_oth_features(data))  # convert to sparse
 # Combine all feature sets
 matrix_combined = hstack([matrix_tf, matrix_pos, matrix_other])
 
-clf = LogisticRegression(max_iter=1000)
+clf = LogisticRegression(max_iter=1000, solver="saga", n_jobs=-1)
 clf.fit(matrix_combined, labels)
 
 def class_to_name(class_label):
@@ -113,17 +120,19 @@ def find_extremes(sentences, timestamps):
         tokens = tokenize(s)
         found = [t for t in tokens if t in bad_words]
         if found:
+            result += "offensive language: "
             if i == len(sentences) - 1:
-                result += str(timestamps[i]) + "."
+                result += str(int(timestamps[i])) + "s."
             else:
-                result += str(timestamps[i]) + "; "
+                result += str(int(timestamps[i])) + "s; \n"
 
         # results from the model
         if preds[i] == 0 or preds[i] == 1:
+            result += "extremist view: "
             if i == len(sentences) - 1:
-                result += str(timestamps[i]) + "."
+                result += str(int(timestamps[i])) + "s."
             else:
-                result += str(timestamps[i]) + "; "
+                result += str(int(timestamps[i])) + "s; \n"
 
     if result == "":
         return "No problems found"
