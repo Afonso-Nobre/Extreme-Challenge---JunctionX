@@ -1,3 +1,14 @@
+""""
+Main kernel of our application
+
+Dependencies:
+- Flask with BSD-3-Clause License [link](https://flask.palletsprojects.com/en/stable/)
+
+Starts the front-end and makes UI responsive.
+
+Created with the help of OpenAI ChatGPT.
+"""
+
 import os
 
 from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory

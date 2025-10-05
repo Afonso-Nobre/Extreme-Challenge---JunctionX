@@ -1,3 +1,12 @@
+""""
+Dependencies:
+- https://github.com/t-davidson/hate-speech-and-offensive-language - MIT License
+
+This trains the model, based on database data and returns classified timestamps.
+
+Created with the help of OpenAI ChatGPT.
+"""
+
 from pathlib import Path
 import pandas as pd
 import numpy as np
