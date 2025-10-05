@@ -19,10 +19,14 @@ import re
 from scipy.sparse import hstack, csr_matrix
 from textstat.textstat import textstat
 
-parent_dir = Path.cwd().parent
-database_path = parent_dir / "data" / "database" / "extremist_vs_appropriate_dataset.csv"
+database_dir = Path.cwd().parent / "data" / "database"
 
-df = pd.read_csv(database_path, usecols=["sentence", "label"])
+# Get all CSV files in the folder
+csv_files = list(database_dir.glob("*.csv"))
+
+dfs = [pd.read_csv(f, usecols=["sentence", "label"]) for f in csv_files]
+df = pd.concat(dfs, ignore_index=True)
+
 data = df["sentence"].astype(str).tolist()
 labels = df["label"].astype(int).tolist()
 
@@ -116,17 +120,19 @@ def find_extremes(sentences, timestamps):
         tokens = tokenize(s)
         found = [t for t in tokens if t in bad_words]
         if found:
+            result += "offensive language: "
             if i == len(sentences) - 1:
-                result += str(timestamps[i]) + "."
+                result += str(int(timestamps[i])) + "s."
             else:
-                result += str(timestamps[i]) + "; "
+                result += str(int(timestamps[i])) + "s; \n"
 
         # results from the model
         if preds[i] == 0 or preds[i] == 1:
+            result += "extremist view: "
             if i == len(sentences) - 1:
-                result += str(timestamps[i]) + "."
+                result += str(int(timestamps[i])) + "s."
             else:
-                result += str(timestamps[i]) + "; "
+                result += str(int(timestamps[i])) + "s; \n"
 
     if result == "":
         return "No problems found"
