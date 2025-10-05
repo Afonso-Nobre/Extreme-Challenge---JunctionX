@@ -24,6 +24,9 @@ Right at the start you will see a pop-up with our policy - how do we define extr
 
 When you close the pop-up you can choose a file to upload. And when you are ready click the button 'Upload' to start the algorithm. It may run for a little while, but we want it to be thorough. When it is ready it will list out all of the timestamps at which inappropriate language was use. The timestamps are in seconds.
 
+If you get "Short file with problems!" feedback, it means that the file only had a short phrase and it was containing extreme views or inappropriate language.
+
+If you get "No problems found" feedback, it means that the file doesn't contain any extreme views or inappropriate language.
 
 ## Licenses
 
