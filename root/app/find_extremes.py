@@ -111,17 +111,19 @@ def find_extremes(sentences, timestamps):
         tokens = tokenize(s)
         found = [t for t in tokens if t in bad_words]
         if found:
+            result += "offensive language: "
             if i == len(sentences) - 1:
-                result += str(timestamps[i]) + "."
+                result += str(int(timestamps[i])) + "s."
             else:
-                result += str(timestamps[i]) + "; "
+                result += str(int(timestamps[i])) + "s; \n"
 
         # results from the model
         if preds[i] == 0 or preds[i] == 1:
+            result += "extremist view: "
             if i == len(sentences) - 1:
-                result += str(timestamps[i]) + "."
+                result += str(int(timestamps[i])) + "s."
             else:
-                result += str(timestamps[i]) + "; "
+                result += str(int(timestamps[i])) + "s; \n"
 
     if result == "":
         return "No problems found"
